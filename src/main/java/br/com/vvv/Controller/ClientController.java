@@ -8,20 +8,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.vvv.Domain.dto.DataRegisterClient;
-import br.com.vvv.Service.LoginService;
+import br.com.vvv.Service.ClientService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping
-@RestController("v1/login")
+@RestController
+@RequestMapping("v1/client")
 @Slf4j
-public class LoginController {
+public class ClientController {
     @Autowired
-    LoginService loginService;
+    ClientService loginService;
 
-    @PostMapping("/register_client")
+    @PostMapping("")
     public ResponseEntity<Void> registerClient(@RequestBody @Valid DataRegisterClient dataRegisterClient) {
-        log.info("DTO: " + dataRegisterClient);
+        log.info("Controller");
+        loginService.registerClient(dataRegisterClient);
         return ResponseEntity.ok(null);
     }
 }
