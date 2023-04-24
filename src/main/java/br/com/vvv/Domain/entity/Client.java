@@ -3,12 +3,14 @@ package br.com.vvv.Domain.entity;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.vvv.Domain.dto.DataRegisterClient;
 import br.com.vvv.Helpers.DataHelpers;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +35,12 @@ public class Client implements UserDetails {
   private String name;
   private Integer age;
   private String login;
+
+  @Column(name = "password")
+  @ColumnTransformer(
+    read = "AES_DECRYPT(password, 'vvv@369528')",
+    write = "AES_ENCRYPT(?, 'vvv@369528')"
+  )
   private String password;
   private String cpf;
   private String profession;
