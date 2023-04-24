@@ -1,0 +1,1 @@
+UPDATE travels.client SET password = AES_ENCRYPT(password, 'vvv@369528');
