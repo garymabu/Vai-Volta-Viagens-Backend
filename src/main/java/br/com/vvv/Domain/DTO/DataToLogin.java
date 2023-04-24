@@ -1,4 +1,4 @@
-package br.com.vvv.Domain.dto;
+package br.com.vvv.Domain.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -7,6 +7,4 @@ public record DataToLogin(
     String login,
     @NotBlank
     String password
-) {
-    
-}
+) { }

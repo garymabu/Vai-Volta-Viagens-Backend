@@ -1,4 +1,4 @@
-package br.com.vvv.Domain.dto;
+package br.com.vvv.Domain.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.vvv.Domain.dto.DataRegisterClient;
+import br.com.vvv.Domain.DTO.DataRegisterClient;
 import br.com.vvv.Service.ClientService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class ClientController {
     @Autowired
     ClientService loginService;
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Void> registerClient(@RequestBody @Valid DataRegisterClient dataRegisterClient) {
         log.info("Controller");
         loginService.registerClient(dataRegisterClient);

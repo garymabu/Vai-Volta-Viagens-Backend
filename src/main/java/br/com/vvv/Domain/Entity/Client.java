@@ -1,4 +1,4 @@
-package br.com.vvv.Domain.entity;
+package br.com.vvv.Domain.Entity;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.vvv.Domain.dto.DataRegisterClient;
-import br.com.vvv.Helpers.DataHelpers;
+import br.com.vvv.Domain.DTO.DataRegisterClient;
+import br.com.vvv.Helpers.DataHelper;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,7 +47,7 @@ public class Client implements UserDetails {
   private String tell;
 
   public Client(DataRegisterClient dataRegisterClient) {
-    this.id = DataHelpers.generatedUuid().toString();
+    this.id = DataHelper.generatedUuid().toString();
     this.name = dataRegisterClient.name();
     this.age = dataRegisterClient.age();
     this.login = dataRegisterClient.login();

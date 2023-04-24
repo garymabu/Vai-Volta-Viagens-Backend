@@ -1,4 +1,7 @@
 package br.com.vvv.Config;
+import br.com.vvv.Domain.DTO.AuthToken;
+import br.com.vvv.Domain.DTO.DataBadRequestMessage;
+import br.com.vvv.Service.ClientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -6,48 +9,51 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.vvv.Service.ClientService;
-import br.com.vvv.Service.TokenService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+
 @Component
 @Slf4j
 public class SecurityFilter extends OncePerRequestFilter {
-
+    private final String[] unfilteredRoutes = {
+        "/v1/auth",
+        "/v1/client"
+    };
     @Autowired
-    private TokenService tokenService;
+    private ClientService clientService;
 
-    @Autowired
-    private ClientService service;
+    private HttpServletResponse tokenValidation(HttpServletRequest request, HttpServletResponse response)
+            throws java.io.IOException {
+        try {
+            var token = AuthToken.fromRequest(request);
+            var login = token.getClientLogin();
+            var client = clientService.findByLogin(login);
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws java.io.IOException, ServletException {
-        var tokenJWT = recuperarToken(request);
-
-        if (tokenJWT != null) {
-            log.info("[SecurityFilter.doFilterInternal] - [token != null]");
-            var subject = tokenService.getSubject(tokenJWT);
-            var client = service.findByLogin(subject);
-
-            var authentication = new UsernamePasswordAuthenticationToken(client, null, client.getAuthorities());
+            var authentication = new UsernamePasswordAuthenticationToken(
+                    client,
+                    null,
+                    client.getAuthorities()
+            );
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch(RuntimeException exception ) {
+            response.sendError(400, exception.getMessage());
         }
-
-        filterChain.doFilter(request, response);
+        return response;
     }
 
-    private String recuperarToken(HttpServletRequest request) {
-        log.info("[SecurityFilter.recuperarToken] - [recuperando token]");
-        var authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null) {
-            log.info("[SecurityFilter.recuperarToken] - [replace token]");
-            return authorizationHeader.replace("Bearer ", "");
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws java.io.IOException, ServletException {
+        String path = request.getRequestURI();
+        if(Arrays.stream(unfilteredRoutes).anyMatch(s -> s.equals(request.getPathInfo()))) {
+            response = tokenValidation(request,response);
         }
-
-        return null;
+        filterChain.doFilter(request, response);
     }
 }

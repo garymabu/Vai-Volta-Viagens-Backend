@@ -1,4 +1,4 @@
-package br.com.vvv.Domain.dto;
+package br.com.vvv.Domain.DTO;
 
 public record DataBadRequestMessage(String message) {
     

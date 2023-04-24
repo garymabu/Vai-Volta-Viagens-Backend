@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import br.com.vvv.Domain.dto.DataRegisterClient;
-import br.com.vvv.Domain.entity.Client;
+import br.com.vvv.Domain.DTO.DataRegisterClient;
+import br.com.vvv.Domain.Entity.Client;
 import br.com.vvv.Repository.ClientRepository;
 import lombok.extern.slf4j.Slf4j;
 

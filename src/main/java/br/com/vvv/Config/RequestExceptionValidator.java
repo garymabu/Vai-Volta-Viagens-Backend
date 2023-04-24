@@ -15,37 +15,35 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
-public class TratadorDeErros {
+public class RequestExceptionValidator {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Void> tratarErro404() {
+    public ResponseEntity<Void> NotFoundException() {
         return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<DadosErroValidacao>> tratarErro400(MethodArgumentNotValidException ex) {        
+    public ResponseEntity<List<ValidationMessage>> NotValidException(MethodArgumentNotValidException ex) {
         var erros = ex.getFieldErrors();
-        return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao::new).toList());
+        return ResponseEntity.badRequest().body(erros.stream().map(ValidationMessage::new).toList());
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    protected ResponseEntity<?> tratarErro1062(DataIntegrityViolationException ex) {        
-        String message;
+    protected ResponseEntity<?> DataIntegrityException(DataIntegrityViolationException ex) {
+        String message = ex.getMessage();
+        if (ex.getCause() instanceof ConstraintViolationException) {
+            message = ((ConstraintViolationException) ex.getCause())
+                .getSQLException()
+                .getMessage();
+        }
 
-    if (ex.getCause() instanceof ConstraintViolationException) {
-        ConstraintViolationException cause = (ConstraintViolationException) ex.getCause();
-        message = cause.getSQLException().getMessage();
-    } else {
-        message = ex.getMessage();
+        return ResponseEntity.badRequest().body("Error: " + message);
     }
 
-    return ResponseEntity.badRequest().body("Error: " + message);
-    }
-
-    private record DadosErroValidacao(String campo, String mensagem) {
-        public DadosErroValidacao(FieldError erro) {
-            this(erro.getField(), erro.getDefaultMessage());
+    private record ValidationMessage(String field, String message) {
+        public ValidationMessage(FieldError fieldError) {
+            this(fieldError.getField(), fieldError.getDefaultMessage());
         }
     }
     
