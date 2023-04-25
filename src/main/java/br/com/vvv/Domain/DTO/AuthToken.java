@@ -25,7 +25,7 @@ public class AuthToken {
         return content;
     }
     private String getSecret() {
-        return System.getenv("token.secret");
+        return "0x3e5c7a6d180a6c802c88542e0dbf2277016b657c8e9909f9cb994ea1c06c2b37";
     }
     public Date getExpirationDate() {
         final int expirationDateInMs = 7200000;
