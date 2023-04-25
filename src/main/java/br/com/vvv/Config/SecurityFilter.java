@@ -51,7 +51,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws java.io.IOException, ServletException {
         String path = request.getRequestURI();
-        if(Arrays.stream(unfilteredRoutes).anyMatch(s -> s.equals(request.getPathInfo()))) {
+        if(!Arrays.stream(unfilteredRoutes).anyMatch(s -> s.equals(path))) {
             response = tokenValidation(request,response);
         }
         filterChain.doFilter(request, response);

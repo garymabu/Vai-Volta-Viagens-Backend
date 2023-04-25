@@ -8,6 +8,5 @@ import br.com.vvv.Domain.Entity.Client;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, String> {
-    UserDetails findByLogin(String subject);
-    
+    Client findByLogin(String subject);
 }
