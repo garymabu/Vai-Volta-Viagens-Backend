@@ -1,5 +1,6 @@
 package br.com.vvv.Controller;
 
+import br.com.vvv.Domain.DTO.DataBadRequestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +21,15 @@ public class ClientController {
     ClientService loginService;
 
     @PostMapping
-    public ResponseEntity<Void> registerClient(@RequestBody @Valid DataRegisterClient dataRegisterClient) {
+    public ResponseEntity<?> registerClient(@RequestBody @Valid DataRegisterClient dataRegisterClient) {
         log.info("Controller");
-        loginService.registerClient(dataRegisterClient);
+        try {
+            loginService.registerClient(dataRegisterClient);
+        } catch(Exception exc) {
+            return ResponseEntity.badRequest().body(
+                new DataBadRequestMessage(exc.getMessage())
+            );
+        }
         return ResponseEntity.ok(null);
     }
 }
