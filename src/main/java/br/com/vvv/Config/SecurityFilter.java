@@ -1,6 +1,5 @@
 package br.com.vvv.Config;
 import br.com.vvv.Domain.DTO.AuthToken;
-import br.com.vvv.Domain.DTO.DataBadRequestMessage;
 import br.com.vvv.Service.ClientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
 @Component
-@Slf4j
 public class SecurityFilter extends OncePerRequestFilter {
     private final String[] unfilteredRoutes = {
         "/v1/auth",
