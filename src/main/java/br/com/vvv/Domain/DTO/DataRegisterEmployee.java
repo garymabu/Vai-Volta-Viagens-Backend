@@ -1,14 +1,11 @@
 package br.com.vvv.Domain.DTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public record DataRegisterClient(
+
+public record DataRegisterEmployee(
         @NotBlank
         String name,
-
-        @NotNull
-        Integer age,
 
         @NotBlank
         String login,
@@ -17,13 +14,10 @@ public record DataRegisterClient(
         String password,
 
         @NotBlank
-        String cpf,
+        String address,
 
         @NotBlank
-        String profession,
-
-        @NotBlank
-        String tell
+        String type
 ) {
 
 }

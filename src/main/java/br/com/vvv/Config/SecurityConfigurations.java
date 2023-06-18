@@ -28,23 +28,27 @@ public class SecurityConfigurations {
 
     @Autowired
     private SecurityFilter securityFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("[SecurityConfigurations.securityFilterChain] - [entrando no método securityFilterChain]");
         return http.csrf().disable()
-            .cors().configurationSource(corsConfigurationSource())
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and().authorizeHttpRequests()
-            .requestMatchers(HttpMethod.POST, "/v1/auth").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/v1/auth").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/v1/client").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/v1/profile").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/v1/modal").permitAll()
-            .requestMatchers(HttpMethod.POST, "/v1/client").permitAll()
-            .anyRequest().authenticated()
-            .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeHttpRequests()
+                .requestMatchers(HttpMethod.POST, "/v1/auth/client").permitAll()
+                .requestMatchers(HttpMethod.POST, "/v1/auth/employee").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/v1/client").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/v1/employee").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/v1/profile/client").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/v1/profile/employee").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/v1/modal").permitAll()
+                .requestMatchers(HttpMethod.POST, "/v1/client").permitAll()
+                .requestMatchers(HttpMethod.POST, "/v1/employee").permitAll()
+                .anyRequest().authenticated()
+                .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
