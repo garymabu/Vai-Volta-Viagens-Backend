@@ -1,22 +1,22 @@
 package br.com.vvv.Domain.DTO;
 
-import br.com.vvv.Domain.Entity.Client;
+import br.com.vvv.Domain.Entity.User;
 import br.com.vvv.Helpers.DataHelper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.security.Key;
 import java.util.Date;
 
-public class AuthToken {
-    private final String content;
-    public AuthToken(Client client) {
-        content = generateTokenContent(client);
+public abstract class AuthToken {
+    protected final String content;
+
+    public AuthToken(User user) {
+        content = generateTokenContent(user);
     }
+
     public AuthToken(String _content) {
         content = _content;
     }
@@ -24,40 +24,36 @@ public class AuthToken {
     public String getContent() {
         return content;
     }
-    private String getSecret() {
+
+    protected String getSecret() {
         return "0x3e5c7a6d180a6c802c88542e0dbf2277016b657c8e9909f9cb994ea1c06c2b37";
     }
+
     public Date getExpirationDate() {
-        final int expirationDateInMs = 7200000;
+        final int expirationDateInMs = 7200000; // 2 horas de validade
         long nowMillis = System.currentTimeMillis();
-        long expirationMillis = nowMillis + expirationDateInMs; // 2 horas de validade
+        long expirationMillis = nowMillis + expirationDateInMs;
         return new Date(expirationMillis);
     }
+
     @Contract("_ -> new")
-    public static @NotNull AuthToken fromRequest(@NotNull HttpServletRequest request)
-            throws RuntimeException {
+    public static @NotNull AuthToken fromRequest(@NotNull HttpServletRequest request) throws RuntimeException {
         var authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null) {
-            return new AuthToken(
-                authorizationHeader.replace("Bearer ", "")
-            );
+            return new AuthToken(authorizationHeader.replace("Bearer ", "")) {
+                @Override
+                protected String generateTokenContent(User user) {
+                    return null;
+                }
+            };
         }
 
-        throw new RuntimeException ("[AuthToken.fromRequest] Auth Header faltando!");
+        throw new RuntimeException("[AuthToken.fromRequest] Auth Header faltando!");
     }
 
-    private String generateTokenContent(@org.jetbrains.annotations.NotNull Client client)
-        throws JwtException {
-        Key key = DataHelper.parseStringToKey(getSecret());
+    protected abstract String generateTokenContent(User user) throws JwtException;
 
-        return Jwts.builder()
-                .setClaims(Jwts.claims().setSubject(client.getLogin()))
-                .setIssuedAt(this.getExpirationDate())
-                .signWith(key)
-                .compact();
-    }
-
-    public String getClientLogin() {
+    public String getUserLogin() {
         try {
             Key key = DataHelper.parseStringToKey(getSecret());
             return Jwts.parserBuilder()

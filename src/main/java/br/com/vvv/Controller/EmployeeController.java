@@ -1,33 +1,33 @@
 package br.com.vvv.Controller;
 
 import br.com.vvv.Domain.DTO.DataBadRequestMessage;
-import br.com.vvv.Service.ClientService;
+import br.com.vvv.Domain.DTO.DataRegisterEmployee;
+import br.com.vvv.Service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import br.com.vvv.Domain.DTO.DataRegisterClient;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("v1/client")
+@RequestMapping("v1/employee")
 @Slf4j
-public class ClientController {
+public class EmployeeController {
+
     @Autowired
-    ClientService loginService;
+    EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<?> registerClient(@RequestBody @Valid DataRegisterClient dataRegisterClient) {
-        log.info("Controller");
+    public ResponseEntity<?> registerEmployee(@RequestBody @Valid DataRegisterEmployee dataRegisterEmployee) {
+        log.info("Employee Controller");
         try {
-            loginService.registerClient(dataRegisterClient);
+            employeeService.registerEmployee(dataRegisterEmployee);
         } catch(Exception exc) {
             return ResponseEntity.badRequest().body(
-                new DataBadRequestMessage(exc.getMessage())
+                    new DataBadRequestMessage(exc.getMessage())
             );
         }
         return ResponseEntity.ok(null);

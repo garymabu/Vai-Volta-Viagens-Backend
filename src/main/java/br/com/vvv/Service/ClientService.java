@@ -15,7 +15,7 @@ public class ClientService {
 
     @Autowired
     private ClientRepository loginRepository;
-    
+
     public Client registerClient(DataRegisterClient dataRegisterClient) {
         log.info("[ClientService.registerClient] - [Service]");
         return loginRepository.save(new Client(dataRegisterClient));
