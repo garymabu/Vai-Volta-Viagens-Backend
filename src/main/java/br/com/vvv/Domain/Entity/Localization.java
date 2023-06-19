@@ -21,27 +21,36 @@ public class Localization {
     private String cityId;
     private String airportCode;
     private String airportName;
+    private String cityName;
 
     public Localization(DataRegisterLocalization dataRegisterLocalization) {
         this.id = DataHelper.generatedUuid().toString();
         this.cityId = dataRegisterLocalization.cityId();
         this.airportCode = dataRegisterLocalization.airportCode();
         this.airportName = dataRegisterLocalization.airportName();
+        this.cityName = dataRegisterLocalization.cityName();
     }
 
     public void updateData(DataUpdateLocalization dataUpdateLocalization) {
-        if (dataUpdateLocalization.cityId() != null && dataUpdateLocalization.airportCode() != null && dataUpdateLocalization.airportName() != null) {
-            if (dataUpdateLocalization.cityId() != null) {
-                this.cityId = dataUpdateLocalization.cityId();
-            }
-            if (dataUpdateLocalization.airportCode() != null) {
-                this.airportCode = dataUpdateLocalization.airportCode();
-            }
-            if (dataUpdateLocalization.airportName() != null) {
-                this.airportName = dataUpdateLocalization.airportName();
-            }
-        } else {
-            throw new IllegalArgumentException("Pelo menos um dos campos deve ser fornecido.");
+        if (dataUpdateLocalization.cityId() != null) {
+            this.cityId = dataUpdateLocalization.cityId();
+        }
+
+        if (dataUpdateLocalization.airportCode() != null) {
+            this.airportCode = dataUpdateLocalization.airportCode();
+        }
+
+        if (dataUpdateLocalization.airportName() != null) {
+            this.airportName = dataUpdateLocalization.airportName();
+        }
+
+        if (dataUpdateLocalization.cityName() != null) {
+            this.cityName = dataUpdateLocalization.cityName();
+        }
+
+        if (dataUpdateLocalization.cityId() != null && dataUpdateLocalization.airportCode() != null &&
+                dataUpdateLocalization.airportName() != null && dataUpdateLocalization.cityName() != null) {
+            throw new IllegalStateException("É necessário fornecer pelo menos um valor para a atualização.");
         }
     }
 }

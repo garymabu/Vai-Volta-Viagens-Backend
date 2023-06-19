@@ -6,9 +6,10 @@ public record DataProfileLocalization(
     String id,
     String airportName,
     String airportCode,
-    String cityId
+    String cityId,
+    String cityName
 ) {
     public DataProfileLocalization(Localization localization) {
-        this(localization.getId(), localization.getAirportName(), localization.getAirportCode(), localization.getCityId());
+        this(localization.getId(), localization.getAirportName(), localization.getAirportCode(), localization.getCityId(), localization.getCityName());
     }
 }

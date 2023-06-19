@@ -43,7 +43,7 @@ public class LocalizationService {
             .orElseThrow(() -> new EntityNotFoundException("Localization not found with id: " + id));
 
         localization.updateData(dataUpdateLocalization);
-
+        
         return localizationRepository.save(localization);
     }
 
