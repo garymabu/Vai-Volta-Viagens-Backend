@@ -1,10 +1,6 @@
 package br.com.vvv.Domain.DTO;
 
-
-import br.com.vvv.Domain.Entity.Client;
 import br.com.vvv.Domain.Entity.Trip;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
