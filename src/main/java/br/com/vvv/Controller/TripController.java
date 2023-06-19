@@ -31,6 +31,18 @@ public class TripController {
         var trips = tripService.getAllTrips();
         return ResponseEntity.ok(trips);
     }
+
+    @GetMapping("/match-with-layover")
+    public ResponseEntity<List<TravelsWithLayoverDTO>> getAllTripsBetweenPlaces(
+        @RequestParam("departureLocalizationId") String localizationDepartureId,
+        @RequestParam("destinationLocalizationId") String localizationDestinationId
+    ) {
+        var result = tripService.getAllTripsWithLayovers(
+            localizationDepartureId,
+            localizationDestinationId
+        );
+        return ResponseEntity.ok(result);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrip(@PathVariable String id) {
         tripService.deleteTrip(id);

@@ -24,10 +24,11 @@ import java.time.ZoneId;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
     private final String[] unfilteredRoutes = {
-            "/v1/auth/client",
-            "/v1/auth/employee",
-            "/v1/client",
-            "/v1/employee"
+        "/v1/auth/client",
+        "/v1/auth/employee",
+        "/v1/client",
+        "/v1/localization",
+        "/v1/trip/match-with-layover"
     };
     @Autowired
     private ClientService clientService;
