@@ -32,21 +32,25 @@ public class Localization {
     }
 
     public void updateData(DataUpdateLocalization dataUpdateLocalization) {
-        if (dataUpdateLocalization.cityId() != null && dataUpdateLocalization.airportCode() != null && dataUpdateLocalization.airportName() != null) {
-            if (dataUpdateLocalization.cityId() != null) {
-                this.cityId = dataUpdateLocalization.cityId();
-            }
-            if (dataUpdateLocalization.airportCode() != null) {
-                this.airportCode = dataUpdateLocalization.airportCode();
-            }
-            if (dataUpdateLocalization.airportName() != null) {
-                this.airportName = dataUpdateLocalization.airportName();
-            }
-            if (dataUpdateLocalization.cityName() != null) {
-                this.cityName = dataUpdateLocalization.cityName();
-            }
-        } else {
-            throw new IllegalArgumentException("Pelo menos um dos campos deve ser fornecido.");
+        if (dataUpdateLocalization.cityId() != null) {
+            this.cityId = dataUpdateLocalization.cityId();
+        }
+
+        if (dataUpdateLocalization.airportCode() != null) {
+            this.airportCode = dataUpdateLocalization.airportCode();
+        }
+
+        if (dataUpdateLocalization.airportName() != null) {
+            this.airportName = dataUpdateLocalization.airportName();
+        }
+
+        if (dataUpdateLocalization.cityName() != null) {
+            this.cityName = dataUpdateLocalization.cityName();
+        }
+
+        if (dataUpdateLocalization.cityId() != null && dataUpdateLocalization.airportCode() != null &&
+                dataUpdateLocalization.airportName() != null && dataUpdateLocalization.cityName() != null) {
+            throw new IllegalStateException("É necessário fornecer pelo menos um valor para a atualização.");
         }
     }
 }
