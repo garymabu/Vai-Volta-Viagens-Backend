@@ -1,7 +1,6 @@
 package br.com.vvv.Domain.Entity;
 
 import br.com.vvv.Domain.DTO.DataRegisterEmployee;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;

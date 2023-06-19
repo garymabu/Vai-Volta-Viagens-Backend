@@ -31,8 +31,14 @@ public class Outlet {
     }
 
     public void updateOutlet(DataUpdateOutlet dataUpdateOutlet) {
-        this.name = dataUpdateOutlet.id();
-        this.location = dataUpdateOutlet.location();
+        if (dataUpdateOutlet.name() != null) {
+            this.name = dataUpdateOutlet.name();
+        }
+        if (dataUpdateOutlet.location() != null) {
+            this.location = dataUpdateOutlet.location();
+        } else {
+            throw new IllegalArgumentException("Pelo menos um dos campos deve ser fornecido.");
+        }
     }
     
 }
