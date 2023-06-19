@@ -4,7 +4,6 @@ import br.com.vvv.Domain.DTO.*;
 import br.com.vvv.Domain.Entity.Trip;
 import br.com.vvv.Service.TripService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/trip")
-@Slf4j
 public class TripController {
     @Autowired
     TripService tripService;

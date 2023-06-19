@@ -4,16 +4,10 @@ import br.com.vvv.Domain.DTO.*;
 import br.com.vvv.Helpers.DataHelper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 @Entity(name = "trip")
 @Table(name = "trip")
