@@ -1,5 +1,6 @@
 package br.com.vvv.Service;
 
+import br.com.vvv.Domain.DTO.DataUpdateEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,4 +26,22 @@ public class EmployeeService {
         log.info("[EmployeeService.findByLogin] - [Service]");
         return employeeRepository.findByLogin(login);
     }
+
+    public Employee updateEmployee(DataUpdateEmployee dataUpdateEmployee) {
+        log.info("[EmployeeService.updateEmployee] - [Service]");
+        Employee employee = employeeRepository.findById(dataUpdateEmployee.id())
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+        employee.updateData(dataUpdateEmployee);
+        return employeeRepository.save(employee);
+    }
+
+    public void deleteEmployee(String id) {
+        log.info("[EmployeeService.deleteEmployee] - [Service]");
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
+        employeeRepository.delete(employee);
+    }
+
+
+
 }
