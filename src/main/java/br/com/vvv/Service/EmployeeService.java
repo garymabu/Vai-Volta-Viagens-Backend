@@ -1,7 +1,10 @@
 package br.com.vvv.Service;
 
+import br.com.vvv.Domain.DTO.DataEmployee;
 import br.com.vvv.Domain.DTO.DataUpdateEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.vvv.Domain.DTO.DataRegisterEmployee;
@@ -42,6 +45,11 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
+    public Page<DataEmployee> findAllEmployees(Pageable pageable) {
+        log.info("[EmployeeService.findAllEmployees] - [Service]");
+        Page<Employee> employees = employeeRepository.findAll(pageable);
+        return employees.map(DataEmployee::new);
+    }
 
 
 }
