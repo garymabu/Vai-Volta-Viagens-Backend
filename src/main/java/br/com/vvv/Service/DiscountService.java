@@ -11,6 +11,8 @@ import br.com.vvv.Domain.Entity.Discount;
 import br.com.vvv.Repository.DiscountRepository;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class DiscountService {
@@ -27,6 +29,11 @@ public class DiscountService {
         log.info("[DiscountService.findAllDiscounts] - [Service]");
         Page<Discount> discounts = discountRepository.findAll(pageable);
         return discounts.map(DataDiscounts::new);
+    }
+
+    public List<Discount> findAllDiscounts() {
+        var discounts = discountRepository.findAll();
+        return discounts;
     }
 
     public void deleteDiscount(String id) {

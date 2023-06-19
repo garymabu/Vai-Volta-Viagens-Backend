@@ -54,4 +54,9 @@ public class TripController {
         Trip updatedTrip = tripService.updateTrip(id, updatedData);
         return ResponseEntity.ok(updatedTrip); // HTTP 200 on success
     }
+
+    @PostMapping("/cost-estimation")
+    public ResponseEntity<DataProfileCostEstimation> getCostEstimation(@RequestBody DataRegisterCostEstimation estimationBody) {
+        return ResponseEntity.ok(tripService.getTripsEstimation(estimationBody));
+    }
 }

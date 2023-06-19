@@ -9,7 +9,8 @@ public record DataProfileTrip(
         LocalDateTime arrivalDatetime,
         LocalDateTime departureDatetime,
         DataProfileLocalization arrivalLocalization,
-        DataProfileLocalization departureLocalization
+        DataProfileLocalization departureLocalization,
+        Float tripValue
 ) {
     public DataProfileTrip(Trip trip) {
         this(
@@ -17,7 +18,8 @@ public record DataProfileTrip(
             trip.getArrivalDatetime(),
             trip.getDepartureDatetime(),
             new DataProfileLocalization(trip.getArrivalLocalization()),
-            new DataProfileLocalization(trip.getDepartureLocalization())
+            new DataProfileLocalization(trip.getDepartureLocalization()),
+            trip.getTripValue()
         );
     }
 }

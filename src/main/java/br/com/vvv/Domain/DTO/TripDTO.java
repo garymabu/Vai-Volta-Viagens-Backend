@@ -8,6 +8,7 @@ public record TripDTO(
         LocalDateTime arrivalDatetime,
         LocalDateTime departureDatetime,
         Localization arrivalLocalization,
-        Localization departureLocalization
+        Localization departureLocalization,
+        Float tripValue
 ) {
 }

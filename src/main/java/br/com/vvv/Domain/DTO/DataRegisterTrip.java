@@ -1,5 +1,6 @@
 package br.com.vvv.Domain.DTO;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,6 +14,9 @@ public record DataRegisterTrip(
         @NotBlank
         String arrivalLocalizationId,
         @NotBlank
-        String departureLocalizationId
+        String departureLocalizationId,
+        @NotNull
+        @DecimalMin("0.0")
+        Float tripValue
 ) {
 }

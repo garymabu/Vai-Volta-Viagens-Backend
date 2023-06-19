@@ -29,18 +29,22 @@ public class Trip {
     @JoinColumn(name = "departure_localization_id", referencedColumnName = "id")
     private Localization departureLocalization;
 
+    private Float tripValue;
+
     public Trip(TripDTO dataRegisterTrip) {
         this.id = DataHelper.generatedUuid().toString();
         this.arrivalDatetime = dataRegisterTrip.arrivalDatetime();
         this.departureDatetime = dataRegisterTrip.departureDatetime();
         this.arrivalLocalization = dataRegisterTrip.arrivalLocalization();
         this.departureLocalization = dataRegisterTrip.departureLocalization();
+        this.tripValue = dataRegisterTrip.tripValue();
     }
 
-    public void updateData(String id, TripDTO dataRegisterTrip) {
+    public void updateData(TripDTO dataRegisterTrip) {
         this.arrivalDatetime = dataRegisterTrip.arrivalDatetime();
         this.departureDatetime = dataRegisterTrip.departureDatetime();
         this.arrivalLocalization = dataRegisterTrip.arrivalLocalization();
         this.departureLocalization = dataRegisterTrip.departureLocalization();
+        this.tripValue = dataRegisterTrip.tripValue();
     }
 }

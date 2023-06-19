@@ -1,9 +1,6 @@
 package br.com.vvv.Service;
 
-import br.com.vvv.Domain.DTO.DataProfileTrip;
-import br.com.vvv.Domain.DTO.DataRegisterTrip;
-import br.com.vvv.Domain.DTO.TravelsWithLayoverDTO;
-import br.com.vvv.Domain.DTO.TripDTO;
+import br.com.vvv.Domain.DTO.*;
 import br.com.vvv.Domain.Entity.Localization;
 import br.com.vvv.Domain.Entity.Trip;
 import br.com.vvv.Repository.LocalizationRepository;
@@ -13,8 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -24,6 +20,8 @@ public class TripService {
     TripRepository tripRepository;
     @Autowired
     LocalizationRepository localizationRepository;
+    @Autowired
+    DiscountService discountService;
     private TripDTO toTripDTO(DataRegisterTrip dataRegisterTrip) {
         Localization arrivalLocalization = localizationRepository.findById(dataRegisterTrip.arrivalLocalizationId())
                 .orElseThrow(() -> new EntityNotFoundException("Localization not found with id: " + dataRegisterTrip.arrivalLocalizationId()));
@@ -35,7 +33,8 @@ public class TripService {
             dataRegisterTrip.arrivalDatetime(),
             dataRegisterTrip.departureDatetime(),
             arrivalLocalization,
-            departureLocalization
+            departureLocalization,
+            dataRegisterTrip.tripValue()
         );
     }
 
@@ -47,6 +46,10 @@ public class TripService {
         log.info("[TripService.GetAllTrips] - [Service]");
         return tripRepository.findAll();
     }
+    public Trip getTripById(String id) {
+        log.info("[TripService.GetAllTrips] - [Service]");
+        return tripRepository.findById(id).orElseThrow();
+    }
     public void deleteTrip(String id) {
         log.info("[TripService.DeleteTrip] - [Service]");
         tripRepository.deleteById(id);
@@ -56,7 +59,7 @@ public class TripService {
         Trip existingTrip = tripRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Trip not found with id: " + id));
 
-        existingTrip.updateData(id, toTripDTO(updatedData));
+        existingTrip.updateData(toTripDTO(updatedData));
 
         return tripRepository.save(existingTrip);
     }
@@ -101,5 +104,44 @@ public class TripService {
                 currentTrip.remove(trip);
             }
         }
+    }
+
+    public DataProfileCostEstimation getTripsEstimation(DataRegisterCostEstimation estimationBody) {
+        var tripsIdList = estimationBody.trips();
+        var tripsList = new ArrayList<Trip>();
+        for (String tripId: tripsIdList) {
+            tripsList.add(getTripById(tripId));
+        }
+        Integer discountThreshold = 10;
+        var participantList = estimationBody.participantList();
+        var costByParticipant = new ArrayList<DataProfileCostEstimationEntry>();
+        Float totalCost = 0f;
+        for (var participant: participantList) {
+            Float value = 0f;
+
+            // applies discounts for underage kids
+            var discount = discountService.findAllDiscounts().get(0);
+            var discountValue = discount.getValue();
+            for(var trip :tripsList)
+            {
+                Float discountMultiplier = 1f;
+                if(participant.age() <= discountThreshold)
+                {
+                    discountMultiplier = discountValue;
+                }
+                Float currentTripValueWithDiscount = discountMultiplier * trip.getTripValue();
+                value += currentTripValueWithDiscount;
+                totalCost += currentTripValueWithDiscount;
+            }
+            costByParticipant.add(new DataProfileCostEstimationEntry(
+                participant.name(),
+                participant.age(),
+                value
+            ));
+        }
+        return new DataProfileCostEstimation(
+            costByParticipant,
+            totalCost
+        );
     }
 }
