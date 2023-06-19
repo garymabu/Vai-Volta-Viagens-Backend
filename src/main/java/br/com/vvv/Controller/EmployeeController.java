@@ -1,12 +1,17 @@
 package br.com.vvv.Controller;
 
 import br.com.vvv.Domain.DTO.DataBadRequestMessage;
+import br.com.vvv.Domain.DTO.DataEmployee;
 import br.com.vvv.Domain.DTO.DataRegisterEmployee;
 import br.com.vvv.Domain.DTO.DataUpdateEmployee;
+import br.com.vvv.Domain.Entity.Employee;
 import br.com.vvv.Service.EmployeeService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +49,13 @@ public class EmployeeController {
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Erro ao tentar atualizar o funcionário: " + ex.getMessage());
         }
+    }
+
+    @GetMapping()
+    public ResponseEntity<Page<DataEmployee>> findAllEmployees(@PageableDefault(size = 10) Pageable pageable) {
+        log.info("[EmployeeController.findAllEmployees] - [Controller]");
+        Page<DataEmployee> employees = employeeService.findAllEmployees(pageable);
+        return ResponseEntity.ok().body(employees);
     }
 
     @DeleteMapping("/{id}")
