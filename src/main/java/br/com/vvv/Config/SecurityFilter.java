@@ -1,8 +1,7 @@
 package br.com.vvv.Config;
 
 import br.com.vvv.Domain.DTO.AuthToken;
-import br.com.vvv.Domain.DTO.ClientAuthToken;
-import br.com.vvv.Domain.DTO.EmployeeAuthToken;
+import br.com.vvv.Domain.Enum.Role;
 import br.com.vvv.Service.ClientService;
 import br.com.vvv.Service.EmployeeService;
 
@@ -18,12 +17,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.time.ZoneId;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
     private final String[] unfilteredRoutes = {
-            "/v1/auth",
+            "/v1/auth/client",
+            "/v1/auth/employee",
             "/v1/client",
             "/v1/employee"
     };
@@ -38,7 +40,13 @@ public class SecurityFilter extends OncePerRequestFilter {
             AuthToken token = AuthToken.fromRequest(request);
             UsernamePasswordAuthenticationToken authentication = null;
 
-            if(token instanceof ClientAuthToken) {
+            LocalDate expirationLocalDate = token.getExpirationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+
+            if(LocalDate.now().isAfter(expirationLocalDate) || LocalDate.now().isEqual(expirationLocalDate))
+                throw new RuntimeException("[AuthToken.fromRequest] Auth Header expirado!");
+            var role = token.getRole();
+            if(role.equals(Role.CLIENT)) {
                 var login = token.getUserLogin();
                 var client = clientService.findByLogin(login);
                 authentication = new UsernamePasswordAuthenticationToken(
@@ -46,7 +54,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                         null,
                         client.getAuthorities()
                 );
-            } else if(token instanceof EmployeeAuthToken) {
+            } else if(role.equals(Role.EMPLOYEE)) {
                 var login = token.getUserLogin();
                 var employee = employeeService.findByLogin(login);
                 authentication = new UsernamePasswordAuthenticationToken(
@@ -59,9 +67,15 @@ public class SecurityFilter extends OncePerRequestFilter {
             if(authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            else throw new RuntimeException("[AuthToken.fromRequest] Autenticação falhou!");
 
-        } catch(RuntimeException exception) {
-            response.sendError(400, exception.getMessage());
+        } catch (RuntimeException exception) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String errorMessage = exception.getMessage();
+            response.getWriter().write("{\"message\": \"" + errorMessage + "\"}");
+            return response;
         }
 
         return response;
