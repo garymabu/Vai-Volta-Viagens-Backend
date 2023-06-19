@@ -1,9 +1,8 @@
 package br.com.vvv.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.vvv.Domain.DTO.DataBooking;
 import br.com.vvv.Domain.DTO.DataRegisterBooking;
 import br.com.vvv.Domain.DTO.DataUpdateBooking;
+import br.com.vvv.Domain.Entity.Booking;
 import br.com.vvv.Service.BookingService;
 import jakarta.validation.Valid;
 
@@ -40,9 +39,9 @@ public class BookingController {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<DataBooking>> findAllBooking(@PageableDefault(size = 10) Pageable pageable) {
-        Page<DataBooking> bookings = bookingService.findAllBooking(pageable);
-        return ResponseEntity.ok().body(bookings);
+    public ResponseEntity<List<Booking>> findAllBooking() {
+        List<Booking> bookings = bookingService.findAllBooking();
+        return ResponseEntity.ok(bookings);
     }
 
     @PutMapping("/{id}")

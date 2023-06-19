@@ -1,7 +1,5 @@
 package br.com.vvv.Domain.DTO;
 
-import java.math.BigDecimal;
-
 public record DataRegisterBooking(
     Integer number,
     Integer timeTrip,
@@ -9,11 +7,10 @@ public record DataRegisterBooking(
     String code,
     boolean layover,
     String createDate,
-    boolean status,
-    BigDecimal value,
-    String originId,
-    String arrivalLocalization,
-    String departureLocalization,
+    String statusId,
+    String value,
+    String arrivalLocalizationId,
+    String departureLocalizationId,
     String clientId,
     String employeeId
 ) {
