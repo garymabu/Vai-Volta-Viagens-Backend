@@ -42,13 +42,29 @@ public class Modal {
     }
 
     public void updateData(DataUpdateModal updatedModalData) {
-        this.type = updatedModalData.type();
-        this.code = updatedModalData.code();
-        this.model = updatedModalData.model();
-        this.capacity = updatedModalData.capacity();
-        this.companyName = updatedModalData.companyName();
-        this.yearManufacture = updatedModalData.manufactureYear();
-        this.active = updatedModalData.active();
+        if (updatedModalData.type() != null) {
+            this.type = updatedModalData.type();
+        }
+        if (updatedModalData.code() != null) {
+            this.code = updatedModalData.code();
+        }
+        if (updatedModalData.model() != null) {
+            this.model = updatedModalData.model();
+        }
+        if (updatedModalData.capacity() != null) {
+            this.capacity = updatedModalData.capacity();
+        }
+        if (updatedModalData.companyName() != null) {
+            this.companyName = updatedModalData.companyName();
+        }
+        if (updatedModalData.manufactureYear() != null) {
+            this.yearManufacture = updatedModalData.manufactureYear();
+        }
+        if (String.valueOf(updatedModalData.active()) != null) {
+            this.active = updatedModalData.active();
+        } else {
+            throw new IllegalArgumentException("Pelo menos um dos campos deve ser fornecido.");
+        }
     }
 
 }
