@@ -2,14 +2,13 @@ package br.com.vvv.Controller;
 
 import br.com.vvv.Domain.DTO.DataBadRequestMessage;
 import br.com.vvv.Domain.DTO.DataRegisterEmployee;
+import br.com.vvv.Domain.DTO.DataUpdateEmployee;
 import br.com.vvv.Service.EmployeeService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -22,7 +21,7 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<?> registerEmployee(@RequestBody @Valid DataRegisterEmployee dataRegisterEmployee) {
-        log.info("Employee Controller");
+        log.info("Registering Employee");
         try {
             employeeService.registerEmployee(dataRegisterEmployee);
         } catch(Exception exc) {
@@ -32,4 +31,33 @@ public class EmployeeController {
         }
         return ResponseEntity.ok(null);
     }
+
+    @PutMapping()
+    @Transactional
+    public ResponseEntity<String> updateEmployee(@RequestBody @Valid DataUpdateEmployee dataUpdateEmployee) {
+        log.info("[EmployeeController.updateEmployee] - [Controller]");
+        try {
+            employeeService.updateEmployee(dataUpdateEmployee);
+            return ResponseEntity.ok("Funcionário atualizado com sucesso");
+        } catch (IllegalArgumentException iException) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Erro ao tentar atualizar o funcionário: " + ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> deleteEmployee(@PathVariable String id) {
+        log.info("[EmployeeController.deleteEmployee] - [Controller]");
+        try {
+            employeeService.deleteEmployee(id);
+            return ResponseEntity.ok("Funcionário excluído com sucesso");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao tentar excluir o funcionário: " + e.getMessage());
+        }
+    }
+
 }

@@ -34,6 +34,14 @@ public abstract class User implements UserDetails {
         this.password = password;
     }
 
+    protected void setLogin(String login) {
+        this.login = login;
+    }
+
+    protected void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String getUsername() {
         return login;
