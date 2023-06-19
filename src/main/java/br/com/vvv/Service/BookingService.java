@@ -123,27 +123,17 @@ public class BookingService {
         Status status = statusRepository.findById(booking.getStatusId().toString())
             .orElseThrow(() -> new EntityNotFoundException("Status not found with id: " + booking.getStatusId()));
 
-        Client client = clientRepository.findById(booking.getClientId().toString())
-            .orElseThrow(() -> new EntityNotFoundException("Client not found with id: " + booking.getClientId()));
-
-        Employee employee = employeeRepository.findById(booking.getEmployeeId().toString())
-            .orElseThrow(() -> new EntityNotFoundException("Employee not found with id: " + booking.getEmployeeId()));
-
         ticketRepository.deleteById(booking.getId());
 
         bookingRepository.deleteById(booking.getId());
 
-        clientRepository.deleteById(booking.getClientId().toString());
+        localizationRepository.deleteById(arrivalLocalization.getId());
 
-        employeeRepository.deleteById(booking.getEmployeeId().toString());
+        localizationRepository.deleteById(departureLocalization.getId());
 
-        localizationRepository.deleteById(booking.getArrivalLocalizationId().toString());
+        typeBookingRepository.deleteById(typeBooking.getId());
 
-        localizationRepository.deleteById(booking.getDepartureLocalizationId().toString());
-
-        typeBookingRepository.deleteById(booking.getTypeId().toString());
-
-        statusRepository.deleteById(booking.getStatusId().toString());
+        statusRepository.deleteById(status.getId());
 
         ticketRepository.deleteById(id);
 
