@@ -1,6 +1,7 @@
 package br.com.vvv.Domain.DTO;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record DataRegisterModal(
     @NotBlank
@@ -21,7 +22,7 @@ public record DataRegisterModal(
     @NotBlank
     String companyName,
 
-    @NotBlank
+    @NotNull
     boolean active
 ) {
     

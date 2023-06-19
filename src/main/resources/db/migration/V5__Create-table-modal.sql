@@ -4,8 +4,8 @@ CREATE TABLE `modal` (
   `code` varchar(100) NOT NULL,
   `model` varchar(100) NOT NULL,
   `capacity` varchar(100) NOT NULL,
-  `yearManufacture` varchar(10) NOT NULL,
-  `companyName` varchar(100) NOT NULL,
+  `year_manufacture` varchar(10) NOT NULL,
+  `company_name` varchar(100) NOT NULL,
   `active` boolean NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
