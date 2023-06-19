@@ -1,7 +1,9 @@
 package br.com.vvv.Domain.DTO;
 
 import br.com.vvv.Domain.Entity.User;
+import br.com.vvv.Domain.Enum.Role;
 import br.com.vvv.Helpers.DataHelper;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +32,7 @@ public abstract class AuthToken {
     }
 
     public Date getExpirationDate() {
-        final int expirationDateInMs = 7200000; // 2 horas de validade
+        final int expirationDateInMs = 172800000; // 2 horas de validade
         long nowMillis = System.currentTimeMillis();
         long expirationMillis = nowMillis + expirationDateInMs;
         return new Date(expirationMillis);
@@ -51,7 +53,7 @@ public abstract class AuthToken {
         throw new RuntimeException("[AuthToken.fromRequest] Auth Header faltando!");
     }
 
-    protected abstract String generateTokenContent(User user) throws JwtException;
+   protected abstract String generateTokenContent(User user) throws JwtException;
 
     public String getUserLogin() {
         try {
@@ -64,6 +66,21 @@ public abstract class AuthToken {
                     .getSubject();
         } catch (JwtException exception) {
             throw new RuntimeException("Token JWT inválido ou expirado!");
+        }
+    }
+
+    public Role getRole() {
+        try {
+            Key key = DataHelper.parseStringToKey(getSecret());
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(content)
+                    .getBody();
+
+            return Role.valueOf(claims.get("role", String.class));
+        } catch (JwtException exception) {
+            throw new RuntimeException("Invalid or expired JWT token!");
         }
     }
 }

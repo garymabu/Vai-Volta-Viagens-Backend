@@ -2,9 +2,11 @@ package br.com.vvv.Domain.DTO;
 
 import br.com.vvv.Domain.Entity.Employee;
 import br.com.vvv.Domain.Entity.User;
+import br.com.vvv.Domain.Enum.Role;
 import br.com.vvv.Helpers.DataHelper;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
 
 import java.security.Key;
 
@@ -19,13 +21,16 @@ public class EmployeeAuthToken extends AuthToken {
     }
 
     @Override
-    protected String generateTokenContent(User user) throws JwtException {
+    public String generateTokenContent(User user) throws JwtException {
         Employee employee = (Employee) user;
         Key key = DataHelper.parseStringToKey(getSecret());
 
+        Claims claims = Jwts.claims().setSubject(employee.getLogin());
+        claims.put("role", Role.EMPLOYEE);
+
         return Jwts.builder()
-                .setClaims(Jwts.claims().setSubject(employee.getLogin()))
-                .setIssuedAt(this.getExpirationDate())
+                .setClaims(claims)
+                .setExpiration(this.getExpirationDate())
                 .signWith(key)
                 .compact();
     }

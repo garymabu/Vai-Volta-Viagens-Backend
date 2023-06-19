@@ -47,7 +47,8 @@ public class SecurityConfigurations {
                 .requestMatchers(HttpMethod.POST, "/v1/client").permitAll()
                 .requestMatchers(HttpMethod.POST, "/v1/employee").permitAll()
                 .anyRequest().authenticated()
-                .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .and()
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
