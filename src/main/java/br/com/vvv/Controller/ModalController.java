@@ -68,14 +68,14 @@ public class ModalController {
     @Transactional
     public ResponseEntity<?> deleteModal(@PathVariable String id) {
         log.info("[ModalController.deleteModal] - [Controller]");
-    try {
-        modalService.deleteModal(id);
-        return ResponseEntity.ok("Modal excluído com sucesso");
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.notFound().build();
-    } catch (Exception e) {
-        return ResponseEntity.badRequest().body("Erro ao tentar excluir o modal: " + e.getMessage());
-    }
+        try {
+            modalService.deleteModal(id);
+            return ResponseEntity.ok("Modal excluído com sucesso");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao tentar excluir o modal: " + e.getMessage());
+        }
     }
     
 }
