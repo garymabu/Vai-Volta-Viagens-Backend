@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.vvv.Domain.DTO.DataProfileClient;
 import br.com.vvv.Domain.Entity.Client;
-import br.com.vvv.Service.ProfileService;
+import br.com.vvv.Service.ClientProfileService;
 
 @RestController
-@RequestMapping("/v1/profile")
-public class ProfileController {
+@RequestMapping("/v1/profile/client")
+public class ClientProfileController {
 
     @Autowired
-    private ProfileService profileService;
+    private ClientProfileService clientProfileService;
 
     @GetMapping("")
-    public ResponseEntity<DataProfileClient> findProfile(@RequestHeader("Authorization") String authentication) {
-        Client profile = profileService.findProfile(authentication.replace("Bearer ", ""));
+    public ResponseEntity<DataProfileClient> findClientProfile(@RequestHeader("Authorization") String authentication) {
+        Client profile = clientProfileService.findProfile(authentication.replace("Bearer ", ""));
         return ResponseEntity.ok().body(new DataProfileClient(profile));
     }
 }
