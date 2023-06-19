@@ -1,6 +1,7 @@
 package br.com.vvv.Domain.Entity;
 
 import br.com.vvv.Domain.DTO.DataRegisterLocalization;
+import br.com.vvv.Domain.DTO.DataUpdateLocalization;
 import br.com.vvv.Helpers.DataHelper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,5 +27,21 @@ public class Localization {
         this.cityId = dataRegisterLocalization.cityId();
         this.airportCode = dataRegisterLocalization.airportCode();
         this.airportName = dataRegisterLocalization.airportName();
+    }
+
+    public void updateData(DataUpdateLocalization dataUpdateLocalization) {
+        if (dataUpdateLocalization.cityId() != null && dataUpdateLocalization.airportCode() != null && dataUpdateLocalization.airportName() != null) {
+            if (dataUpdateLocalization.cityId() != null) {
+                this.cityId = dataUpdateLocalization.cityId();
+            }
+            if (dataUpdateLocalization.airportCode() != null) {
+                this.airportCode = dataUpdateLocalization.airportCode();
+            }
+            if (dataUpdateLocalization.airportName() != null) {
+                this.airportName = dataUpdateLocalization.airportName();
+            }
+        } else {
+            throw new IllegalArgumentException("Pelo menos um dos campos deve ser fornecido.");
+        }
     }
 }
