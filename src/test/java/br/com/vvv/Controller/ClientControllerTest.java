@@ -2,14 +2,12 @@ package br.com.vvv.Controller;
 
 import br.com.vvv.Domain.DTO.DataBadRequestMessage;
 import br.com.vvv.Domain.DTO.DataRegisterClient;
-import br.com.vvv.Domain.Entity.Client;
 import br.com.vvv.Service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

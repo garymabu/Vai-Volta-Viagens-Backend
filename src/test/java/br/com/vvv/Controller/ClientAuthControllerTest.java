@@ -5,7 +5,6 @@ import br.com.vvv.Domain.DTO.DataBadRequestMessage;
 import br.com.vvv.Domain.DTO.DataToLogin;
 import br.com.vvv.Service.ClientAuthService;
 import jakarta.validation.ValidationException;
-import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,8 +27,6 @@ class ClientAuthControllerTest {
 
     @Mock
     private ClientAuthService clientAuthService;
-
-    private Validator validator;
 
     @BeforeEach
     void setUp() {
